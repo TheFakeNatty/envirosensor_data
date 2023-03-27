@@ -2,7 +2,6 @@ import json
 import os
 import time
 from pathlib import Path
-from utils import handler
 
 current = os.path.dirname(os.path.realpath(__file__))
  
@@ -23,7 +22,7 @@ def make_file(value, week):
     device_time = data['Time']
     device_data = data['Data']
     payload = {}
-    payload[device_time] = device_id
+    payload[device_id] = device_time
     payload.update(device_data)
     device_file = Path(str(folder) + "\\" + str(device_id) + ".json")
     Path(device_file).touch()
