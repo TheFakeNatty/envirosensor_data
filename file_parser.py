@@ -3,11 +3,10 @@ import os
 import time
 from pathlib import Path
 
-current = os.path.dirname(os.path.realpath(__file__))
- 
-parent = os.path.dirname(current)
- 
-data_folder = os.path.join(current, 'Data\\ICRI_Envirosensor_Data')
+currentpath = Path(__file__)
+rootpath = Path(currentpath).parent
+data_folder = Path(rootpath / "Data" / "ICRI_Envirosensor_Data")
+
 
 def makedir(path):
     if os.path.exists(path):
@@ -16,15 +15,18 @@ def makedir(path):
         os.mkdir(path)
 
 def make_file(value, week):
-    folder = str(current) + "\\data\\new_data\\wk" + str(week)
+    wk = "wk" + str(week)
+    folder = Path ( rootpath / "data" / "new_data" / wk)
     data= json.loads(value)
     device_id = data['DeviceID']
     device_time = data['Time']
     device_data = data['Data']
     payload = {}
-    payload[device_id] = device_time
+    payload["ID"] = device_id
+    payload["TIME"] = device_time
     payload.update(device_data)
-    device_file = Path(str(folder) + "\\" + str(device_id) + ".json")
+    file_name = str(device_id) + ".json"
+    device_file = Path(folder / file_name)
     Path(device_file).touch()
     json_object = json.dumps(payload, indent=4, separators=(',',': '))
     with open(device_file, 'a') as f:
@@ -38,13 +40,13 @@ def make_file(value, week):
 def main():
 
     start = time.time()
-    print ()
-    print(str(current) + "\\data\\new_data")
+
     week = 1
     for file in os.listdir(data_folder):
-        makedir(str(current) + "\\data\\new_data\\wk" + str(week))
+        wk = "wk" + str(week)
+        makedir(Path(rootpath / "data" / "new_data" / wk))
 
-        f = open(str(data_folder) + "\\" + str(file))
+        f = open(Path(data_folder) / str(file))
         data = json.load(f)
 
         for entries in data:
