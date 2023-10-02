@@ -1,21 +1,15 @@
 import json
 import os
-import pymongo
 from pathlib import Path
 from pymongo import MongoClient
 
-db_url= "mongodb://localhost:27017/"
-myclient = MongoClient(db_url)
-db = myclient["Unsorted"]
-collection = db['IoT_Devices']
+def unsorted_push(url, dbname, db_collection, data_folder):
+    db_client = MongoClient(url)
+    db = db_client[dbname]
+    collection = db[db_collection]
 
-currentpath = Path(__file__)
-rootpath = Path(currentpath).parent
-data_folder = Path(rootpath / "data")
+    print(f"Pushing data to {dbname}, collection {db_collection}.....")
 
-
-def main():
-    print(data_folder)
     for folder in os.listdir(data_folder):
         if folder == 'README.md':
             pass
@@ -27,5 +21,5 @@ def main():
                 for value in data:
                     collection.insert_one(value)
 
-if __name__ in "__main__":
-    main()
+if __name__ == "__main__":
+    pass

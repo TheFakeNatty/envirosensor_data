@@ -42876,7 +42876,6 @@
         "OPT": "130.08",
         "BAT": "36.05",
         "HDT": "35.63",
-        "Starting Contiki-3.x-2948-g86dbd59\nWith DriverLib v0.46593\nTI CC2650 SensorTag\nIEEE 802.15.4": " Yes, Sub-GHz",
         "HDH": "20.06"
     },
     {
@@ -90656,7 +90655,6 @@
         "OPT": "129.44",
         "BAT": "36.53",
         "HDT": "36.11",
-        "Starting Contiki-3.x-2948-g86dbd59\nWith DriverLib v0.46593\nTI CC2650 SensorTag\nIEEE 802.15.4": " Yes, Sub-GHz",
         "HDH": "24.31"
     },
     {
