@@ -14,7 +14,7 @@ def main():
     data_folder = Path(rootpath / "data")
 
     start_time = datetime.datetime.now()
-    db_ops.unsorted_push(db_url, db, collection, data_folder)
+    db_ops.unsorted_grouped_push(db_url, db, collection, data_folder)
     end_time = datetime.datetime.now()
 
     total_time = end_time - start_time
