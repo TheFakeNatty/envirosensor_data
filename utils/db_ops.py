@@ -50,6 +50,11 @@ def sorted_push(url, dbname, db_collection, data_folder):
     db = db_client[dbname]
     collection = db[db_collection]
 
+    try:
+        db.create_collection(db_collection, timeseries={ 'timeField': 'TIME', 'metaField': 'metadata' })
+    except:
+        print("Either the collection already exists of something failed...")
+
     print(f"Pushing Sorted data to {dbname}, collection {db_collection}.....")
 
     for folder in os.listdir(data_folder):
@@ -90,44 +95,89 @@ def sorted_push(url, dbname, db_collection, data_folder):
                     except:
                         value["TIME"] = ""
                     try:
-                        value["TMP"] = value["TMP"]
+                        value["TMP"] = float(value["TMP"])
                     except:
                         value["TMP"] = ""
                     try:
-                        value["OPT"] = value["OPT"]
+                        value["OPT"] = float(value["OPT"])
                     except:
                         value["OPT"] = ""
                     try:
-                        value["BAT"] = value["BAT"]
+                        value["BAT"] = float(value["BAT"])
                     except:
                         value["BAT"] = ""
                     try:
-                        value["HDT"] = value["HDT"]
+                        value["HDT"] = float(value["HDT"])
                     except:
                         value["HDT"] = ""
                     try:
-                        value["BAR"] = value["BAR"]
+                        value["BAR"] = float(value["BAR"])
                     except:
                         value["BAR"] = ""
                     try:
-                        value["HDH"] = value["HDH"]
+                        value["HDH"] = float(value["HDH"])
                     except:
                         value["HDH"] = ""
 
-                    collection.insert_one(
-                        {
-                            "metadata": { 
-                                "ID": value["ID"], 
-                                "OPT": value['OPT'],
-                                "TMP": value['TMP'],
-                                "BAT": value['BAT'],
-                                "HDT": value['HDT'],
-                                "BAR": value['BAR'],
-                                "HDH": value['HDH']
-                            },
-                            "TIME": formatted_time,
-                        }
-                    )
+                    for k, v in value.items():
+                        if v != "":
+                            try:
+                                if k == "TMP":
+                                    collection.insert_one({
+                                        "metadata": {
+                                            "ID": value["ID"], 
+                                            "type": "Ambient Temperature",
+                                        },
+                                        "TIME": formatted_time,
+                                        "TMP": float(v)
+                                    })
+                                elif k == "OPT":
+                                    collection.insert_one({
+                                        "metadata": {
+                                            "ID": value["ID"], 
+                                            "type": "Ambient Light",
+                                        },
+                                        "TIME": formatted_time,
+                                        "OPT": float(v)
+                                    })
+                                elif k == "BAT":
+                                    collection.insert_one({
+                                        "metadata": {
+                                            "ID": value["ID"], 
+                                            "type": "Temperature",
+                                        },
+                                        "TIME": formatted_time,
+                                        "BAT": float(v)
+                                    })
+                                elif k == "HDT":
+                                    collection.insert_one({
+                                        "metadata": {
+                                            "ID": value["ID"], 
+                                            "type": "Ambient Temperature",
+                                        },
+                                        "TIME": formatted_time,
+                                        "HDT": float(v)
+                                    })
+                                elif k == "BAR":
+                                    collection.insert_one({
+                                        "metadata": {
+                                            "ID": value["ID"], 
+                                            "type": "Barometric Pressure",
+                                        },
+                                        "TIME": formatted_time,
+                                        "BAR": float(v)
+                                    })
+                                elif k == "HDH":
+                                    collection.insert_one({
+                                        "metadata": {
+                                            "ID": value["ID"], 
+                                            "type": "Humidity",
+                                        },
+                                        "TIME": formatted_time,
+                                        "HDH": float(v)
+                                    })
+                            except:
+                                print("Failed to push value" + v)
 
 def sorted_grouped_push(url, dbname, db_collection, data_folder):
     db_client = MongoClient(url)
