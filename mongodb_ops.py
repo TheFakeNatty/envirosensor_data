@@ -5,7 +5,7 @@ from pathlib import Path
 import utils.mongo_db_ops as mongo_db_ops
 
 db_url= "mongodb://localhost:27017/"
-db = "Test-Data"
+db = "unsorted"
 collection = 'IoT_Devices'
 
 def main():
